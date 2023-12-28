@@ -1,8 +1,8 @@
 #include <iostream>
 #include <iomanip> // for setw
+#include <ctime>
 using namespace std;
 
-// Library
 class Library {
     private:
         struct Book {
@@ -12,6 +12,7 @@ class Library {
             string ISBN;
             string SID = "None";
             string Department;
+            string Date = "None";
         };
 
         vector<Book> books;
@@ -75,9 +76,13 @@ class Library {
             ifstream File(filename, ios::in);
             if (!File.is_open()) {
                 cout <<"\n\t\t\t File Is Empty !!! \n"<< endl;
-                //cin.ignore();
                 return;
             }
+            else if (File.peek() == ifstream::traits_type::eof()){
+                cout << "\n\n\t\t\t File Is Empty !!! "<< endl;
+                return;
+            }
+            else{
             books.clear();
             string aData;
             while (getline(File, aData)) {
@@ -89,7 +94,8 @@ class Library {
                 getline(split, Newbook.Department, ',');
                 getline(split, Newbook.ISBN, ',');
                 getline(split, Newbook.SID,',');
-                getline(split, Newbook.checkout);
+                getline(split, Newbook.checkout,',');
+                getline(split, Newbook.Date);
 
                 books.push_back(Newbook);
             }
@@ -107,6 +113,8 @@ class Library {
                 i++;
             }
             cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
+
+            }
 
 
         }
@@ -231,7 +239,8 @@ class Library {
             getline(cut, Newbook.Department, ',');
             getline(cut, Newbook.ISBN, ',');
             getline(cut, Newbook.SID,',');
-            getline(cut, Newbook.checkout);
+            getline(cut, Newbook.checkout,',');
+            getline(cut, Newbook.Date);
 
             books.push_back(Newbook);
         }
@@ -239,13 +248,14 @@ class Library {
         File.close();
     }
 
+
         // Saving The Data To The TXT File By Appending Previous Data
         void saveToFile(const string& filename) {   // For Faculty
         ofstream File(filename, ios::app | ios::out);
 
         if (File.is_open()) {
             for (const auto& book : books) {
-                File << book.Title << ',' << book.Author << ',' << book.Department << ',' << book.ISBN << ',' << book.SID<< ',' << book.checkout << endl;
+                File << book.Title << ',' << book.Author << ',' << book.Department << ',' << book.ISBN << ',' << book.SID << ',' << book.checkout << ',' << book.Date << endl;
                 cout<<"\n\n\t\t\t\t Book Data Is Saved Successfully To The Library "<<endl;
             }
             File.close();
@@ -259,9 +269,13 @@ class Library {
             ifstream File(filename, ios::in);
             if (!File.is_open()) {
                 cout << "\n\n\t\t\t File Is Empty !!! "<< endl;
-                cin.ignore();
                 return;
             }
+            else if (File.peek() == ifstream::traits_type::eof()){
+                cout << "\n\n\t\t\t File Is Empty !!! "<< endl;
+                return;
+            }
+            else{
             books.clear();
             string aData;
             while (getline(File, aData)) {
@@ -273,7 +287,8 @@ class Library {
                 getline(split,Newbook.Department, ',');
                 getline(split, Newbook.ISBN, ',');
                 getline(split, Newbook.SID,',');
-                getline(split, Newbook.checkout);
+                getline(split, Newbook.checkout,',');
+                getline(split, Newbook.Date);
 
                 books.push_back(Newbook);
             }
@@ -281,31 +296,32 @@ class Library {
             int i=1;
             // Display the loaded data
             cout << "  " << setfill('_') << setw(2) << "" << setw(6) << "" << setw(1) << "" << setw(25) << "" << setw(3) << "" << setw(25) << "" << setw(3) << "" << setw(15) << "" << setw(3) << ""
-                 << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setfill(' ') << endl;
+                 << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(15) << "" << setfill(' ') << endl;
 
             cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                 << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                 << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
             cout << " " <<  setw(1) << "| " << setw(5) << left << "S.No" << setw(3) << "|" << setw(25) << left << "Title" << setw(3) << "|" << setw(25)  << left << "Author" << setw(3) << "|" << setw(15) << left
-                 << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << "|" << endl;
+                 << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << setw(3) << "|" << setw(15) << left << "Date Issue" << "|" << endl;
 
             cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|"
-                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
 
             cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                 << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                 << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
             for (const auto& book : books) {
                 cout << " " << setw(2) << "|" << setw(1) << left << i << setw(4) << "." << setw(3) << "|" << setw(25) << left << book.Title << setw(3) << "|" << setw(25) << left << book.Author << setw(3) << "|"
-                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << "|" << endl;
+                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << setw(3) << "|" << setw(15) << left << book.Date << "|" << endl;
 
                 cout << " " << setw(2) << "|" << setw(5) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |" << setw(20) << ""
-                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << "  |" << endl;
+                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << "  |" << endl;
 
                 i++;
             }
             cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|"
-                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
+            }
 
         }
 
@@ -318,26 +334,26 @@ class Library {
             if (book.Title.find(searchTitle) != string::npos) {
                 if (!found){
                     cout << "\n  " << setfill('_') << setw(2) << "" << setw(6) << "" << setw(1) << "" << setw(25) << "" << setw(3) << "" << setw(25) << "" << setw(3) << "" << setw(15) << "" << setw(3) << ""
-                         << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setfill(' ') << endl;
+                         << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(15) << "" << setfill(' ') << endl;
 
                     cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                     cout << " " <<  setw(1) << "| " << setw(5) << left << "S.No" << setw(3) << "|" << setw(25) << left << "Title" << setw(3) << "|" << setw(25)  << left << "Author" << setw(3) << "|" << setw(15) << left
-                         << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << "|" << endl;
+                         << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << setw(3) << "|" << setw(15) << left << "Date Issue" << "|" << endl;
 
                     cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|"
-                         << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                         << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
 
                     cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                 }
                 cout << " " << setw(2) << "|" << setw(1) << left << i << setw(4) << "." << setw(3) << "|" << setw(25) << left << book.Title << setw(3) << "|" << setw(25) << left << book.Author << setw(3) << "|"
-                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << "|" << endl;
+                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << setw(3) << "|" << setw(15) << left << book.Date << "|" << endl;
 
                 cout << " " << setw(2) << "|" << setw(5) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |" << setw(20) << ""
-                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << "  |" << endl;
+                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << "  |" << endl;
 
                 found = true;
                 i++;
@@ -345,7 +361,7 @@ class Library {
         }
         if (found==true){
             cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|"
-                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
         }
         if (!found) {
             cout << "\n\n\t\t\t\t Book Data Does Not Found !!!" << endl;
@@ -361,26 +377,26 @@ class Library {
             if (book.Author.find(searchAuthor) != string::npos) {
                 if (!found){
                     cout << "\n  " << setfill('_') << setw(2) << "" << setw(6) << "" << setw(1) << "" << setw(25) << "" << setw(3) << "" << setw(25) << "" << setw(3) << "" << setw(15) << "" << setw(3) << ""
-                         << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setfill(' ') << endl;
+                         << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(15) << "" << setfill(' ') << endl;
 
                     cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                     cout << " " <<  setw(1) << "| " << setw(5) << left << "S.No" << setw(3) << "|" << setw(25) << left << "Title" << setw(3) << "|" << setw(25)  << left << "Author" << setw(3) << "|" << setw(15) << left
-                         << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << "|" << endl;
+                         << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << setw(3) << "|" << setw(15) << left << "Date Issue" << "|" << endl;
 
                     cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|"
-                         << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                         << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
 
                     cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                 }
                 cout << " " << setw(2) << "|" << setw(1) << left << i << setw(4) << "." << setw(3) << "|" << setw(25) << left << book.Title << setw(3) << "|" << setw(25) << left << book.Author << setw(3) << "|"
-                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << "|" << endl;
+                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << setw(3) << "|" << setw(15) << left << book.Date << "|" << endl;
 
                 cout << " " << setw(2) << "|" << setw(5) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |" << setw(20) << ""
-                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << "  |" << endl;
+                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << "  |" << endl;
 
                 found = true;
                 i++;
@@ -388,7 +404,7 @@ class Library {
         }
         if (found==true){
             cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|"
-                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
         }
         if (!found) {
             cout << "\n\n\t\t\t\t Book Data Does Not Found !!!" << endl;
@@ -404,26 +420,26 @@ class Library {
             if (book.Department.find(sDeprt) != string::npos) {
                 if (!found){
                     cout << "\n  " << setfill('_') << setw(2) << "" << setw(6) << "" << setw(1) << "" << setw(25) << "" << setw(3) << "" << setw(25) << "" << setw(3) << "" << setw(15) << "" << setw(3) << ""
-                         << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setfill(' ') << endl;
+                         << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(15) << "" << setfill(' ') << endl;
 
                     cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                     cout << " " <<  setw(1) << "| " << setw(5) << left << "S.No" << setw(3) << "|" << setw(25) << left << "Title" << setw(3) << "|" << setw(25)  << left << "Author" << setw(3) << "|" << setw(15) << left
-                         << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << "|" << endl;
+                         << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << setw(3) << "|" << setw(15) << left << "Date Issue" << "|" << endl;
 
                     cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|"
-                         << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                         << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
 
                     cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                         << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                 }
                 cout << " " << setw(2) << "|" << setw(1) << left << i << setw(4) << "." << setw(3) << "|" << setw(25) << left << book.Title << setw(3) << "|" << setw(25) << left << book.Author << setw(3) << "|"
-                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << "|" << endl;
+                     << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << setw(3) << "|" << setw(15) << left << book.Date << "|" << endl;
 
                 cout << " " << setw(2) << "|" << setw(5) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |" << setw(20) << ""
-                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << "  |" << endl;
+                     << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << "  |" << endl;
 
                 found = true;
                 i++;
@@ -431,7 +447,7 @@ class Library {
         }
         if (found==true){
             cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|"
-                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                 << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
         }
         if (!found) {
             cout << "\n\n\t\t\t\t Book Data Does Not Found !!!" << endl;
@@ -458,32 +474,32 @@ class Library {
             if (book.ISBN == searchISBN) {
                     if (!found){
                         cout << "\n  " << setfill('_') << setw(2) << "" << setw(6) << "" << setw(1) << "" << setw(25) << "" << setw(3) << "" << setw(25) << "" << setw(3) << "" << setw(15) << "" << setw(3) << ""
-                             << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setfill(' ') << endl;
+                             << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(15) << "" << setfill(' ') << endl;
 
                         cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                         cout << " " <<  setw(1) << "| " << setw(5) << left << "S.No" << setw(3) << "|" << setw(25) << left << "Title" << setw(3) << "|" << setw(25)  << left << "Author" << setw(3) << "|" << setw(15) << left
-                             << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << "|" << endl;
+                             << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << setw(3) << "|" << setw(15) << left << "Date Issue" << "|" << endl;
 
                         cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|"
-                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
 
                         cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                     }
                     cout << " " << setw(2) << "|" << setw(1) << left << i << setw(4) << "." << setw(3) << "|" << setw(25) << left << book.Title << setw(3) << "|" << setw(25) << left << book.Author << setw(3) << "|"
-                         << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << "|" << endl;
+                         << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << setw(3) << "|" << setw(15) << left << book.Date << "|" << endl;
 
                     cout << " " << setw(2) << "|" << setw(5) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |" << setw(20) << ""
-                         << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << "  |" << endl;
+                         << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << "  |" << endl;
 
                     found = true;
                     i++;
                     if (found==true){
                         cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|"
-                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
                     }
 
                 if (book.checkout == "Yes") {
@@ -527,8 +543,16 @@ class Library {
                                     cout<<"\n\n\t\t\t\t Student Is Already Applied For Book "<<endl;
                                 }
                                 else{
+                                //Code To Add Current Date
+                                time_t ti = time(NULL);
+                                tm* datePtr = localtime(&ti);
+                                char buffer[11]; // Buffer to store the formatted date
+                                strftime(buffer, sizeof(buffer), "%d-%m-%Y", datePtr);
+
                                 book.SID = searchEID;
                                 book.checkout = "No";
+                                book.Date = buffer;
+
                                 cout <<"\n\n " << book.Title << " Book Issued To  " <<book.SID << endl;
                                 }
                         }
@@ -560,7 +584,7 @@ class Library {
             }
             // Write the entire updated books vector to the file
             for (const auto& book : books) {
-                outFile << book.Title << ',' << book.Author << ',' << book.Department << ',' << book.ISBN << ',' <<book.SID << ',' << book.checkout << endl;
+                outFile << book.Title << ',' << book.Author << ',' << book.Department << ',' << book.ISBN << ',' <<book.SID << ',' << book.checkout << ',' << book.Date << endl;
             }
             outFile.close();  // Close the file after writing
         }
@@ -574,32 +598,32 @@ class Library {
             if (book.ISBN == searchISBN) {
                 if (!found){
                         cout << "\n  " << setfill('_') << setw(2) << "" << setw(6) << "" << setw(1) << "" << setw(25) << "" << setw(3) << "" << setw(25) << "" << setw(3) << "" << setw(15) << "" << setw(3) << ""
-                             << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setfill(' ') << endl;
+                             << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(15) << "" << setfill(' ') << endl;
 
                         cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                         cout << " " <<  setw(1) << "| " << setw(5) << left << "S.No" << setw(3) << "|" << setw(25) << left << "Title" << setw(3) << "|" << setw(25)  << left << "Author" << setw(3) << "|" << setw(15) << left
-                             << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << "|" << endl;
+                             << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << setw(3) << "|" << setw(15) << left << "Date Issue" << "|" << endl;
 
                         cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|"
-                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
 
                         cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                     }
                     cout << " " << setw(2) << "|" << setw(1) << left << i << setw(4) << "." << setw(3) << "|" << setw(25) << left << book.Title << setw(3) << "|" << setw(25) << left << book.Author << setw(3) << "|"
-                         << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << "|" << endl;
+                         << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << setw(3) << "|" << setw(15) << left << book.Date << "|" << endl;
 
                     cout << " " << setw(2) << "|" << setw(5) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |" << setw(20) << ""
-                         << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << "  |" << endl;
+                         << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << "  |" << endl;
 
                     found = true;
                     i++;
                     if (found==true){
                         cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|"
-                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
                     }
                     cout << "\n\n\t\t\t\t\t Book Found !!! \n" << endl;
                     char opt;
@@ -612,8 +636,9 @@ class Library {
                         string findeno;
                         findeno = stud.searchEnrollid(book.SID);
                         if (book.SID == findeno){
-                            book.SID="None";
-                            book.checkout="Yes";
+                            book.SID = "None";
+                            book.checkout = "Yes";
+                            book.Date = "None";
                             cout<<"\n\n\t\t\t\t Book Is Returned To The Library "<<endl;
                         }
                         else{
@@ -640,7 +665,7 @@ class Library {
 
             // Write the entire updated books vector to the file
             for (const auto& book : books) {
-                outFile << book.Title << ',' << book.Author << ',' << book.Department << ',' << book.ISBN << ',' <<book.SID <<',' << book.checkout << endl;
+                outFile << book.Title << ',' << book.Author << ',' << book.Department << ',' << book.ISBN << ',' <<book.SID <<',' << book.checkout << ',' << book.Date << endl;
                 }
             outFile.close();  // Close the file after writing
         }
@@ -655,46 +680,47 @@ class Library {
 
                     if (!found){
                         cout << "\n  " << setfill('_') << setw(2) << "" << setw(6) << "" << setw(1) << "" << setw(25) << "" << setw(3) << "" << setw(25) << "" << setw(3) << "" << setw(15) << "" << setw(3) << ""
-                             << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setfill(' ') << endl;
+                             << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(20) << "" << setw(3) << "" << setw(15) << "" << setfill(' ') << endl;
 
                         cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                         cout << " " <<  setw(1) << "| " << setw(5) << left << "S.No" << setw(3) << "|" << setw(25) << left << "Title" << setw(3) << "|" << setw(25)  << left << "Author" << setw(3) << "|" << setw(15) << left
-                             << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << "|" << endl;
+                             << "Department" << setw(3) << "|" << setw(20) << left << "ISBN" << setw(3) << "|" << setw(20) << left << "Distribute To" << setw(3) << "|" << setw(20) << left << "Available" << setw(3) << "|" << setw(15) << left << "Date Issue" << "|" << endl;
 
                         cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|"
-                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
 
                         cout << " " << setfill(' ') << setw(1) << "|" << setw(6) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |"
-                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setfill(' ') << "  |" << endl;
+                             << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << setfill(' ') << "  |" << endl;
 
                     }
                     cout << " " << setw(2) << "|" << setw(1) << left << i << setw(4) << "." << setw(3) << "|" << setw(25) << left << book.Title << setw(3) << "|" << setw(25) << left << book.Author << setw(3) << "|"
-                         << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << "|" << endl;
+                         << setw(15) << left << book.Department << setw(3) << "|" << setw(20) << left << book.ISBN << setw(3) << "|" << setw(20) << left << book.SID << setw(3) << "|" << setw(20) << left << book.checkout << setw(3) << "|" << setw(15) << left << book.Date << "|" << endl;
 
                     cout << " " << setw(2) << "|" << setw(5) << "" << setw(1) << "|" << setw(25) << "" << setw(3) << "  |" << setw(25) << "" << setw(3) << "  |" << setw(15) << "" << setw(3) << "  |" << setw(20) << ""
-                         << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << "  |" << endl;
+                         << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(20) << "" << setw(3) << "  |" << setw(15) << "" << "  |" << endl;
 
                     found = true;
                     i++;
                     if (found==true){
                         cout << " " << setfill('_') << setw(2) << "|" << setw(5) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(25) << "" << setw(3) << "|" << setw(15) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|"
-                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setfill(' ') << "|" << endl;
+                             << setw(20) << "" << setw(3) << "|" << setw(20) << "" << setw(3) << "|" << setw(15) << "" << setfill(' ') << "|" << endl;
                     }
-                    cout << "\n\n\t\t\t\t\t Book Found \n!!!" << endl;
+                    cout << "\n\n\t\t\t\t\t Book Found !!!\n" << endl;
 
                     char opt;
                     cout<<"\n Do You Want To Delete This Book From Library (Y/N) : ";
                     cin>>opt;
                     if (opt=='Y' or opt =='y'){
 
-                            book.Title="";
-                            book.Author="";
-                            book.Department="";
-                            book.ISBN="";
-                            book.SID="";
-                            book.checkout="";
+                            book.Title = "";
+                            book.Author = "";
+                            book.Department = "";
+                            book.ISBN = "";
+                            book.SID = "";
+                            book.checkout = "";
+                            book.Date = "";
 
                             cout<<"\n\n\t\t\t\t Book Data Has Been Deleted From Library"<<endl;
                     }
@@ -718,10 +744,10 @@ class Library {
             }
 
             for (const auto& book : books) {  // Updating File To Become Empty
-                    if (!book.Title.empty() || !book.Author.empty() || !book.Department.empty() || !book.ISBN.empty() || !book.SID.empty() || !book.checkout.empty()) {
+                    if (!book.Title.empty() || !book.Author.empty() || !book.Department.empty() || !book.ISBN.empty() || !book.SID.empty() || !book.checkout.empty() || !book.Date.empty()) {
 
                         outFile << book.Title << ',' << book.Author << ',' << book.Department << ',' << book.ISBN << ','
-                                << book.SID << ',' << book.checkout << endl;
+                                << book.SID << ',' << book.checkout << ',' << book.Date << endl;
                     } // This Code Will Not Run As All Items Will Become Empty On Deletion As It Ensures That Only non-empty information is written
 
                 }
@@ -749,7 +775,8 @@ class Library {
                     getline(split,NewData.Department, ',');
                     getline(split, NewData.ISBN, ',');
                     getline(split, NewData.SID,',');
-                    getline(split, NewData.checkout);
+                    getline(split, NewData.checkout,',');
+                    getline(split, NewData.Date);
 
                     if (NewData.ISBN == searchISBN){
                         file.close();
